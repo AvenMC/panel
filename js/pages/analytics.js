@@ -3,7 +3,6 @@ import { api } from "../api.js";
 import { card, pageHeader } from "../ui.js";
 import { lineChart, legend, hbar } from "../charts.js";
 import { RETENTION_DAYS } from "../analytics.js";
-import { fmtDate } from "../format.js";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const shortDate = (t) => new Date(t).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
@@ -75,8 +74,8 @@ function retentionCard(data) {
     earlier[i] ? el("span", { className: `small ${latest[i] >= earlier[i] ? "up" : "down"}`, text: `${latest[i] >= earlier[i] ? "▲" : "▼"} ${Math.abs((latest[i] - earlier[i]) * 100).toFixed(1)} pts vs prior 4 weeks` }) : null)));
 
   const table = el("div", { className: "tableWrap" }, el("table", { className: "heatTable" },
-    el("thead", {}, el("tr", {}, el("th", { text: "Cohort (week of)" }), el("th", { text: "New" }), RETENTION_DAYS.map((d) => el("th", { text: `D${d}` })))),
-    el("tbody", {}, data.cohorts.filter((c) => c.values[0] !== null).reverse().map((c) => el("tr", {}, el("th", { text: fmtDate(c.start).split(",")[0] }), el("td", { text: c.size }),
+    el("thead", {}, el("tr", {}, el("th", { text: "Week of" }), el("th", { text: "New" }), RETENTION_DAYS.map((d) => el("th", { text: `D${d}` })))),
+    el("tbody", {}, data.cohorts.filter((c) => c.values[0] !== null).reverse().map((c) => el("tr", {}, el("th", { text: shortDate(c.start) }), el("td", { text: c.size }),
       c.values.map((v) => el("td", { className: "cell", style: heat(v), text: v === null ? "–" : pct(v) })))))));
 
   return card(el("h2", { text: "Retention" }),

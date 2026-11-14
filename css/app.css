@@ -118,8 +118,8 @@ a.stat:hover { border-color: var(--colorPrimaryLine); }
 .barFill { height: 100%; border-radius: 5px; background: var(--colorPrimary); }
 .barCount { text-align: right; font-weight: 700; }
 
-.tabs { display: flex; gap: var(--space2); overflow-x: auto; scrollbar-width: none; }
-.tab { flex: none; min-height: 38px; padding-inline: var(--space4); border: 1px solid var(--colorBorder); border-radius: 999px; background: none; color: var(--colorTextSecondary); font-weight: 600; font-size: 14px; }
+.tabs { display: flex; flex-wrap: wrap; gap: var(--space2); }
+.tab { flex: 1 1 auto; min-height: 38px; padding-inline: var(--space3); border: 1px solid var(--colorBorder); border-radius: 999px; background: none; color: var(--colorTextSecondary); font-weight: 600; font-size: 14px; }
 .tab.active { background: var(--colorPrimarySoft); border-color: var(--colorPrimaryLine); color: var(--colorPrimary); }
 
 .instance { display: flex; flex-direction: column; gap: var(--space3); padding: var(--space3); border: 1px solid var(--colorBorder); border-radius: var(--radiusMedium); background: var(--colorSurface); }
@@ -169,10 +169,10 @@ a.stat:hover { border-color: var(--colorPrimaryLine); }
 .up { color: var(--colorSuccess); }
 .down { color: var(--colorDanger); }
 .tableWrap { overflow-x: auto; margin-inline: calc(var(--space2) * -1); padding-inline: var(--space2); }
-.heatTable { width: 100%; min-width: 440px; border-collapse: separate; border-spacing: 3px; font-size: 13px; text-align: center; }
-.heatTable th { font-weight: 600; color: var(--colorTextSecondary); text-align: left; white-space: nowrap; }
+.heatTable { width: 100%; border-collapse: separate; border-spacing: 3px; font-size: 13px; text-align: center; }
+.heatTable th { padding: 0 2px; font-weight: 600; color: var(--colorTextSecondary); text-align: left; white-space: nowrap; }
 .heatTable thead th { text-align: center; }
-.heatTable td { padding: 8px 4px; border-radius: 6px; color: var(--colorTextSecondary); }
+.heatTable td { padding: 8px 2px; border-radius: 6px; color: var(--colorTextSecondary); }
 .heatTable td.cell { color: var(--colorText); font-weight: 600; background: var(--colorSurface); }
 .hourGrid { display: grid; grid-template-columns: 28px repeat(24, minmax(0, 1fr)); gap: 2px; align-items: center; }
 .hourCell { aspect-ratio: 1; border-radius: 3px; min-height: 10px; }
@@ -200,3 +200,6 @@ a.instance:hover { border-color: var(--colorPrimaryLine); }
 .logLine.CMD > span:last-child { color: var(--colorPrimary); }
 .logLine.CMD .logLevel { color: var(--colorPrimary); }
 @media (max-width: 520px) { .logTime { display: none; } }
+
+@media (max-width: 520px) { .heatTable { font-size: 11px; border-spacing: 2px; } }
+@media (max-width: 520px) { .tab { padding-inline: var(--space2); font-size: 13px; } .tabs { gap: 6px; } }
