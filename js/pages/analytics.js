@@ -12,10 +12,13 @@ const avg = (a) => (a.length ? sum(a) / a.length : 0);
 const pct = (v) => `${(v * 100).toFixed(1)}%`;
 
 export async function render() {
-  const range = Number(sessionStorage.getItem("avenmc.panel.range")) || 30;
+  const stored = sessionStorage.getItem("avenmc.panel.range");
   const data = await api.analytics();
+  const allTime = stored === "all";
+  const range = allTime ? data.daily.length : Number(stored) || 30;
+  const rangeLabel = allTime ? "all time" : `${range} days`;
   const cur = data.daily.slice(-range);
-  const prev = data.daily.slice(-range * 2, -range);
+  const prev = allTime ? [] : data.daily.slice(-range * 2, -range);
 
   const delta = (key, fn = avg) => {
     const a = fn(cur.map((d) => d[key]));
@@ -33,21 +36,24 @@ export async function render() {
 
   const kpi = (label, value, d) => el("div", { className: "stat" },
     el("span", { className: "statValue", text: value }), el("span", { className: "small muted", text: label }),
-    d?.change !== null && d ? el("span", { className: `small ${d.change >= 0 ? "up" : "down"}`, text: `${d.change >= 0 ? "▲" : "▼"} ${Math.abs(d.change * 100).toFixed(1)}% vs previous ${range} days` }) : null);
+    d?.change !== null && d ? el("span", { className: `small ${d.change >= 0 ? "up" : "down"}`, text: `${d.change >= 0 ? "▲" : "▼"} ${Math.abs(d.change * 100).toFixed(1)}% vs previous ${rangeLabel}` }) : null);
 
-  const tabs = el("div", { className: "tabs" }, [7, 30, 90].map((n) =>
-    el("button", { type: "button", className: `tab${n === range ? " active" : ""}`, onClick: () => { sessionStorage.setItem("avenmc.panel.range", n); location.reload(); } }, `${n} days`)));
+  const tabs = el("div", { className: "tabs" }, [[7, "7 days"], [30, "30 days"], [90, "90 days"], ["all", "All time"]].map(([n, l]) =>
+    el("button", { type: "button", className: `tab${String(n) === (allTime ? "all" : String(range)) ? " active" : ""}`, onClick: () => { sessionStorage.setItem("avenmc.panel.range", n); location.reload(); } }, l)));
 
+  const peakSeries = [{ label: "Peak concurrent players", color: "#ffa147", values: cur.map((d) => d.peakCcu) }];
   const labels = (arr) => [[0, shortDate(arr[0].date)], [Math.floor(arr.length / 2), shortDate(arr[Math.floor(arr.length / 2)].date)], [arr.length - 1, shortDate(arr[arr.length - 1].date)]];
   const growth = [{ label: "Daily active players", color: "#28b9f5", values: cur.map((d) => d.dau) }, { label: "New players", color: "#66eb8c", values: cur.map((d) => d.newPlayers) }];
 
   return el("div", { className: "stack" },
     pageHeader("Analytics", "Players, retention and engagement (demo data)"), tabs,
     el("div", { className: "grid stats" },
-      kpi("Avg. daily active players", Math.round(dau.value), dau), kpi(`New players (${range} days)`, fresh.value, fresh),
+      kpi("Avg. daily active players", Math.round(dau.value), dau), kpi(`New players (${rangeLabel})`, fresh.value, fresh),
       kpi("Peak concurrent", peak.value, peak), kpi("Avg. session length", `${Math.round(session.value)} min`, session),
       kpi("Stickiness (DAU/MAU)", pct(stickiness))),
+    recordsCard(data),
     card(el("h2", { text: "Player growth" }), legend(growth), lineChart(growth, { labels: labels(cur) })),
+    card(el("h2", { text: "Peak player count" }), legend(peakSeries), lineChart(peakSeries, { labels: labels(cur) })),
     retentionCard(data), el("div", { className: "grid two" }, heatmapCard(data), el("div", { className: "stack" }, modeCard(data), regionCard(data), sessionCard(data))));
 }
 
@@ -89,3 +95,20 @@ function heatmapCard(data) {
 const modeCard = (data) => card(el("h2", { text: "Playtime by mode" }), hbar(data.modes.map((m) => ({ label: m.mode, value: m.share, text: `${m.share}%` }))));
 const regionCard = (data) => card(el("h2", { text: "Regions" }), hbar(data.regions.map((r) => ({ label: r.region, value: r.share, text: `${r.share}% · ${r.ping} ms` }))));
 const sessionCard = (data) => card(el("h2", { text: "Session length" }), hbar(data.sessionBuckets.map((b) => ({ label: b.label, value: b.pct, text: `${b.pct}%` }))));
+
+function recordsCard(data) {
+  const d = data.daily;
+  const peakDay = d.reduce((a, b) => (b.peakCcu > a.peakCcu ? b : a));
+  const bestDau = d.reduce((a, b) => (b.dau > a.dau ? b : a));
+  const totalPlayers = sum(d.map((x) => x.newPlayers));
+  const hours = Math.round(sum(d.map((x) => (x.sessions * x.avgSessionMin) / 60)));
+  const rec = (label, value, sub) => el("div", { className: "stat" }, el("span", { className: "statValue", text: value }),
+    el("span", { className: "small muted", text: label }), sub && el("span", { className: "small muted", text: sub }));
+  return card(el("h2", { text: "All-time records" }),
+    el("div", { className: "grid stats small" },
+      rec("Peak concurrent players", peakDay.peakCcu.toLocaleString("en-GB"), shortDate(peakDay.date)),
+      rec("Best daily active players", bestDau.dau.toLocaleString("en-GB"), shortDate(bestDau.date)),
+      rec("Total players", totalPlayers.toLocaleString("en-GB"), `since ${shortDate(d[0].date)}`),
+      rec("Total sessions", sum(d.map((x) => x.sessions)).toLocaleString("en-GB")),
+      rec("Total playtime", `${hours.toLocaleString("en-GB")} h`)));
+}

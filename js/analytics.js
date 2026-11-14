@@ -10,7 +10,7 @@ export const RETENTION_DAYS = [1, 3, 7, 14, 30];
 export const MODES = ["Nodebuff", "Crystal", "Mace", "FFA", "Training"];
 const startOfDay = (t) => Math.floor(t / DAY) * DAY;
 
-export function buildAnalytics(totalDays = 90) {
+export function buildAnalytics(totalDays = 540) {
   const r = rng(7);
   const today = startOfDay(Date.now());
   const daily = [];
@@ -22,7 +22,7 @@ export function buildAnalytics(totalDays = 90) {
     daily.push({
       date, dau, newPlayers: Math.round(dau * (0.16 + r() * 0.08)),
       sessions: Math.round(dau * (1.8 + r() * 0.5)), avgSessionMin: Math.round(24 + r() * 10 + (weekend ? 5 : 0)),
-      peakCcu: Math.round(dau * (0.24 + r() * 0.05)),
+      peakCcu: Math.round(dau * (0.34 + r() * 0.06)),
     });
   }
 

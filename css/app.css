@@ -174,9 +174,9 @@ a.stat:hover { border-color: var(--colorPrimaryLine); }
 .heatTable thead th { text-align: center; }
 .heatTable td { padding: 8px 4px; border-radius: 6px; color: var(--colorTextSecondary); }
 .heatTable td.cell { color: var(--colorText); font-weight: 600; background: var(--colorSurface); }
-.hourGrid { display: grid; grid-template-columns: 32px repeat(24, 1fr); gap: 2px; align-items: center; }
+.hourGrid { display: grid; grid-template-columns: 28px repeat(24, minmax(0, 1fr)); gap: 2px; align-items: center; }
 .hourCell { aspect-ratio: 1; border-radius: 3px; min-height: 10px; }
-.hourLabel, .dayLabel { font-size: 10px; color: var(--colorTextMuted); }
+.hourLabel, .dayLabel { font-size: 10px; color: var(--colorTextMuted); overflow: visible; white-space: nowrap; min-width: 0; }
 .hourLabel { grid-column: span 1; }
 .barRow.wide { grid-template-columns: 76px 1fr auto; }
 .barRow.wide .barCount { min-width: 78px; font-size: 13px; }
