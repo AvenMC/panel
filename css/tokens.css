@@ -1,0 +1,76 @@
+/* Central design tokens. Every color, font and spacing value is defined here once. */
+/* Inter (UI and body) and Space Grotesk (headings): SIL OFL 1.1. Monocraft is reserved for player names. */
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/Inter.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../assets/fonts/SpaceGrotesk.woff2") format("woff2");
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Monocraft";
+  src: url("../assets/fonts/Monocraft.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+
+  --colorBackground: #080f20;
+  --colorSurface: #0d1729;
+  --colorCard: #111f35;
+  --colorElevated: #172b49;
+  --colorPrimary: #28b9f5;
+  --colorSecondary: #2479c9;
+  --colorText: #ffffff;
+  --colorTextSecondary: #91a9c9;
+  --colorTextMuted: #637b9c;
+  --colorBorder: #1b2b45;
+  --colorSuccess: #39d69a;
+  --colorDanger: #f07878;
+  --colorNodebuff: #66eb8c;
+  --colorNodebuffPanel: #16221c;
+  --colorNodebuffEdge: #223e32;
+  --colorCrystal: #b89efa;
+  --colorCrystalPanel: #1a1b30;
+  --colorCrystalEdge: #2e2f56;
+  --colorMace: #ffa147;
+  --colorMacePanel: #241a18;
+  --colorMaceEdge: #4a342a;
+  --colorAsia: #8b7cff;
+
+  --colorPrimarySoft: color-mix(in srgb, var(--colorPrimary) 14%, transparent);
+  --colorPrimaryLine: color-mix(in srgb, var(--colorPrimary) 45%, var(--colorBorder));
+  --colorOverlay: color-mix(in srgb, var(--colorBackground) 80%, transparent);
+
+  --fontHeading: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --fontBody: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --fontMinecraft: "Monocraft", "Inter", monospace;
+
+  --space1: 4px;
+  --space2: 8px;
+  --space3: 12px;
+  --space4: 16px;
+  --space5: 24px;
+  --space6: 32px;
+  --space7: 48px;
+  --space8: 72px;
+
+  --radiusSmall: 8px;
+  --radiusMedium: 12px;
+  --radiusLarge: 16px;
+
+  --controlHeight: 44px;
+  --maxContentWidth: 1160px;
+  --pagePadding: clamp(16px, 4vw, 32px);
+  --navHeight: 68px;
+
+  --transitionFast: 160ms ease;
+}
