@@ -21,6 +21,8 @@ const PERMISSIONS = {
   "servers.view": ALL,
   "servers.control": ["owner", "developer"],
   "servers.logs": ["owner", "developer"],
+  "servers.console": ["owner", "developer"],
+  "analytics.view": ["owner", "admin", "developer"],
   "broadcast.send": ["owner", "admin", "developer"],
   "flags.manage": ["owner", "developer"],
   "staff.view": ["owner", "admin"],

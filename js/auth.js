@@ -49,10 +49,10 @@ export async function finishDiscordLogin() {
   const expected = sessionStorage.getItem(STATE_KEY);
   sessionStorage.removeItem(STATE_KEY);
   history.replaceState(null, "", location.pathname + location.search);
-  if (!expected || hash.get("state") !== expected) throw new Error("Ungültiger Login-Status. Bitte erneut versuchen.");
+  if (!expected || hash.get("state") !== expected) throw new Error("Invalid login state. Please try again.");
 
   const res = await fetch("https://discord.com/api/users/@me", { headers: { Authorization: `Bearer ${token}` } });
-  if (!res.ok) throw new Error("Discord-Profil konnte nicht geladen werden.");
+  if (!res.ok) throw new Error("Could not load the Discord profile.");
   const d = await res.json();
   return {
     discordId: d.id,

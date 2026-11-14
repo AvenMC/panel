@@ -31,7 +31,7 @@ export function empty(text) {
 }
 
 export function loading() {
-  return el("div", { className: "empty muted", text: "Lade …" });
+  return el("div", { className: "empty muted", text: "Loading …" });
 }
 
 export function field(label, control) {
@@ -63,7 +63,7 @@ export async function attempt(fn, successMessage) {
     if (successMessage) toast(successMessage, "success");
     return true;
   } catch (e) {
-    toast(e.message || "Fehler", "danger");
+    toast(e.message || "Error", "danger");
     return false;
   }
 }
@@ -75,7 +75,7 @@ export function modal(title, body, actions = []) {
   const overlay = el("div", { className: "overlay", onClick: (e) => e.target === overlay && close() },
     el("div", { className: "sheet", role: "dialog", "aria-modal": "true", "aria-label": title },
       el("div", { className: "sheetHead" }, el("h2", { text: title }),
-        el("button", { type: "button", className: "iconBtn", "aria-label": "Schließen", onClick: close }, icon("close"))),
+        el("button", { type: "button", className: "iconBtn", "aria-label": "Close", onClick: close }, icon("close"))),
       el("div", { className: "sheetBody" }, body),
       actions.length ? el("div", { className: "sheetActions" }, actions.map((a) => a(close))) : null));
   document.addEventListener("keydown", onKey);
@@ -85,7 +85,7 @@ export function modal(title, body, actions = []) {
 
 export function confirmDialog(title, text, confirmLabel, onConfirm, variant = "danger") {
   modal(title, el("p", { className: "muted", text }), [
-    (close) => button("Abbrechen", close),
+    (close) => button("Cancel", close),
     (close) => button(confirmLabel, async () => { close(); await onConfirm(); }, variant),
   ]);
 }

@@ -9,11 +9,12 @@ const page = (file) => () => import(`./pages/${file}.js`);
 
 const ROUTES = [
   { path: "dashboard", label: "Dashboard", icon: "home", perm: "dashboard.view", load: page("dashboard"), tab: true },
-  { path: "players", label: "Spieler", icon: "users", perm: "players.view", load: page("players"), tab: true },
+  { path: "analytics", label: "Analytics", icon: "chart", perm: "analytics.view", load: page("analytics") },
+  { path: "players", label: "Players", icon: "users", perm: "players.view", load: page("players"), tab: true },
   { path: "reports", label: "Reports", icon: "flag", perm: "reports.handle", load: page("reports"), tab: true },
-  { path: "sanctions", label: "Sanktionen", icon: "gavel", perm: "sanction.issue", load: page("sanctions") },
-  { path: "appeals", label: "Einsprüche", icon: "mail", perm: "appeals.handle", load: page("appeals") },
-  { path: "servers", label: "Server", icon: "server", perm: "servers.view", load: page("servers") },
+  { path: "sanctions", label: "Sanctions", icon: "gavel", perm: "sanction.issue", load: page("sanctions") },
+  { path: "appeals", label: "Appeals", icon: "mail", perm: "appeals.handle", load: page("appeals") },
+  { path: "servers", label: "Servers", icon: "server", perm: "servers.view", load: page("servers") },
   { path: "system", label: "System", icon: "tool", perm: "flags.manage", load: page("system") },
   { path: "staff", label: "Team", icon: "shield", perm: "staff.view", load: page("staff") },
   { path: "audit", label: "Audit-Log", icon: "log", perm: "audit.view", load: page("audit") },
@@ -38,7 +39,7 @@ async function signInDiscord(profile) {
   const role = config.ownerDiscordIds.includes(profile.discordId) ? "owner" : staff?.role;
   if (!role) {
     sessionStorage.setItem("avenmc.panel.flash",
-      `Kein Zugriff. Gib diese Discord-ID einem Owner zum Freischalten: ${profile.discordId}`);
+      `No access. Give this Discord ID to an owner to get unlocked: ${profile.discordId}`);
     return;
   }
   setUser({ ...profile, role });
@@ -75,7 +76,7 @@ async function render() {
   const allowed = can(user.role, route.perm);
   try {
     const mod = await route.load();
-    const content = allowed ? await mod.render(parts.slice(1), user) : el("div", { className: "empty muted", text: "Kein Zugriff auf diese Seite." });
+    const content = allowed ? await mod.render(parts.slice(1), user) : el("div", { className: "empty muted", text: "You do not have access to this page." });
     if (my !== token) return;
     replaceContent(view, content);
   } catch (e) {
@@ -95,17 +96,17 @@ function shell(user, route, view) {
     el("div", { className: "userBox" },
       user.avatar ? el("img", { className: "avatar", src: user.avatar, alt: "" }) : el("div", { className: "avatar fallback", text: user.name[0].toUpperCase() }),
       el("div", { className: "userInfo" }, el("strong", { text: user.name }), roleBadge(user.role)),
-      el("button", { type: "button", className: "iconBtn", "aria-label": "Abmelden", onClick: signOut }, icon("out"))));
+      el("button", { type: "button", className: "iconBtn", "aria-label": "Sign out", onClick: signOut }, icon("out"))));
 
   const scrim = el("div", { className: "scrim", id: "scrim", onClick: closeDrawer });
   const topbar = el("header", { className: "topbar" },
-    el("button", { type: "button", className: "iconBtn menuBtn", "aria-label": "Menü", onClick: openDrawer }, icon("menu")),
+    el("button", { type: "button", className: "iconBtn menuBtn", "aria-label": "Menu", onClick: openDrawer }, icon("menu")),
     el("strong", { text: route.label }),
-    config.apiMode === "mock" ? el("span", { className: "badge warn", text: "Testdaten" }) : null);
+    config.apiMode === "mock" ? el("span", { className: "badge warn", text: "Test data" }) : null);
 
   const bottom = el("nav", { className: "bottomNav" },
     tabs.map((r) => el("a", { href: `#/${r.path}`, className: r.path === route.path ? "active" : "" }, icon(r.icon), r.label)),
-    el("button", { type: "button", onClick: openDrawer }, icon("more"), "Mehr"));
+    el("button", { type: "button", onClick: openDrawer }, icon("more"), "More"));
 
   return el("div", { className: "shell" }, sidebar, scrim, el("div", { className: "main" }, topbar, el("main", { className: "content" }, view)), bottom);
 }

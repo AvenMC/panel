@@ -17,18 +17,18 @@ export function renderLogin(onLogin) {
 
   const discordBtn = el("button", {
     type: "button", className: "btn primary wide",
-    onClick: () => (discordConfigured() ? startDiscordLogin() : toast("Discord ist noch nicht eingerichtet (Client-ID in js/config.js).", "danger")),
-  }, el("img", { src: "assets/discord.svg", alt: "", width: 20, height: 20 }), "Mit Discord anmelden");
+    onClick: () => (discordConfigured() ? startDiscordLogin() : toast("Discord is not set up yet (client ID in js/config.js).", "danger")),
+  }, el("img", { src: "assets/discord.svg", alt: "", width: 20, height: 20 }), "Sign in with Discord");
 
   return el("div", { className: "loginWrap" },
     el("div", { className: "loginCard card" },
       el("img", { src: "assets/logoMark.png", alt: "AVENMC", width: 56, height: 56 }),
       el("h1", { text: "Staff Panel" }),
-      el("p", { className: "muted", text: "Nur für Owner, Developer, Admins und Moderatoren." }),
+      el("p", { className: "muted", text: "For owners, developers, admins and moderators only." }),
       flash && el("div", { className: "notice danger", text: flash }),
       discordBtn,
       config.demoLogin && el("div", { className: "demo" },
-        el("p", { className: "small muted", text: "Testmodus: als Rolle anmelden" }),
+        el("p", { className: "small muted", text: "Test mode: sign in as a role" }),
         el("div", { className: "demoGrid" }, Object.entries(DEMO_USERS).map(([role, u]) =>
           el("button", { type: "button", className: "btn secondary", onClick: () => onLogin({ ...u, avatar: null, role }) }, ROLES[role].label))))));
 }

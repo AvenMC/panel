@@ -30,7 +30,7 @@ export function seedData() {
       kills: Math.floor(r() * 5000), deaths: Math.floor(r() * 4000), notes: [],
     };
   });
-  players[3].notes.push({ id: "n1", author: "Lena", text: "Wurde schon zweimal wegen Spam verwarnt.", at: now - 5 * DAY });
+  players[3].notes.push({ id: "n1", author: "Lena", text: "Already warned twice for spam.", at: now - 5 * DAY });
 
   const staff = [
     { discordId: "100000000000000001", name: "Chris", role: "owner" },
@@ -40,7 +40,7 @@ export function seedData() {
     { discordId: "100000000000000005", name: "Tom", role: "mod" },
   ];
 
-  const reasons = ["Hacking (Killaura)", "Beleidigung im Chat", "Spam", "Bug-Abuse", "Werbung", "Toxisches Verhalten"];
+  const reasons = ["Hacking (killaura)", "Insulting in chat", "Spam", "Bug abuse", "Advertising", "Toxic behaviour"];
   const sanctions = [];
   const add = (playerId, type, reason, by, agoH, durH) => {
     const createdAt = now - agoH * HOUR;
@@ -62,11 +62,11 @@ export function seedData() {
 
   const reports = [
     ["p2", "CrystalFox", "Killaura in Crystal", "open"],
-    ["p7", "Voltz", "Beleidigt mich im Chat", "open"],
-    ["p11", "Raven", "Spammt Werbung", "progress"],
-    ["p18", "Orbit", "Nutzt Bug in der Arena", "open"],
-    ["p23", "Wavey", "Toxisches Verhalten im Duell", "done"],
-    ["p31", "Comet", "Reach-Hacks vermutet", "open"],
+    ["p7", "Voltz", "Insulted me in chat", "open"],
+    ["p11", "Raven", "Spamming advertisements", "progress"],
+    ["p18", "Orbit", "Abusing a bug in the arena", "open"],
+    ["p23", "Wavey", "Toxic behaviour in a duel", "done"],
+    ["p31", "Comet", "Suspected reach hacks", "open"],
   ].map(([targetId, reporter, reason, status], i) => ({
     id: `r${i + 1}`, targetId, reporter, reason, status,
     assignee: status === "progress" ? "Lena" : null,
@@ -74,8 +74,8 @@ export function seedData() {
   }));
 
   const appeals = [
-    { id: "a1", sanctionId: "s3", text: "Ich wusste nicht, dass das ein Bug war. Bitte um Entsperrung.", status: "open", createdAt: now - 6 * HOUR },
-    { id: "a2", sanctionId: "s7", text: "Ich wurde fälschlich gemeldet.", status: "open", createdAt: now - 20 * HOUR },
+    { id: "a1", sanctionId: "s3", text: "I did not know this was a bug. Please unban me.", status: "open", createdAt: now - 6 * HOUR },
+    { id: "a2", sanctionId: "s7", text: "I was reported by mistake.", status: "open", createdAt: now - 20 * HOUR },
   ];
 
   const mk = (type, region, n, max) => ({
@@ -95,21 +95,21 @@ export function seedData() {
   instances[9].players = 0;
 
   const flags = [
-    { key: "ranked_queue", label: "Ranked Queue", desc: "Ranked Matchmaking aktivieren", enabled: true },
-    { key: "cross_region", label: "Cross-Region Matches", desc: "Spiele zwischen Regionen erlauben", enabled: false },
-    { key: "new_hub_ui", label: "Neues Hub-Menü", desc: "Überarbeitetes Auswahlmenü im Hub", enabled: true },
-    { key: "season_rewards", label: "Season Belohnungen", desc: "Belohnungen am Season-Ende vergeben", enabled: false },
+    { key: "ranked_queue", label: "Ranked queue", desc: "Enable ranked matchmaking", enabled: true },
+    { key: "cross_region", label: "Cross-region matches", desc: "Allow matches between regions", enabled: false },
+    { key: "new_hub_ui", label: "New hub menu", desc: "Reworked selection menu in the hub", enabled: true },
+    { key: "season_rewards", label: "Season rewards", desc: "Hand out rewards at season end", enabled: false },
   ];
 
   const audit = [
-    { id: "l1", actor: "Admin Alex", role: "admin", action: "sanction.ban", target: "xShadow", details: "Permanent: Hacking (Killaura)", at: now - 30 * HOUR },
-    { id: "l2", actor: "Lena", role: "mod", action: "sanction.mute", target: "Kiwi", details: "24 Std.: Beleidigung im Chat", at: now - 4 * HOUR },
-    { id: "l3", actor: "Dev Dan", role: "developer", action: "flag.toggle", target: "new_hub_ui", details: "aktiviert", at: now - 2 * DAY },
+    { id: "l1", actor: "Admin Alex", role: "admin", action: "sanction.ban", target: "xShadow", details: "Permanent: Hacking (killaura)", at: now - 30 * HOUR },
+    { id: "l2", actor: "Lena", role: "mod", action: "sanction.mute", target: "Kiwi", details: "24 h: Insulting in chat", at: now - 4 * HOUR },
+    { id: "l3", actor: "Dev Dan", role: "developer", action: "flag.toggle", target: "new_hub_ui", details: "enabled", at: now - 2 * DAY },
   ];
 
   return {
     version: 1, players, staff, sanctions, reports, appeals, instances, flags, audit, broadcasts: [],
-    maintenance: { enabled: false, message: "Wartungsarbeiten, wir sind gleich zurück!" },
+    maintenance: { enabled: false, message: "Maintenance in progress, we will be right back!" },
     counters: { sanction: 100, note: 100, audit: 100, broadcast: 1 },
   };
 }

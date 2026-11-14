@@ -50,5 +50,6 @@ const ICONS = {
   back: '<path d="M15 5l-7 7 7 7"/>',
   close: '<path d="M6 6l12 12M18 6L6 18"/>',
   out: '<path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/>',
+  chart: '<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',
   send: '<path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/>',
 };

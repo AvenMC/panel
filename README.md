@@ -16,7 +16,7 @@ python3 -m http.server 8000   # then open http://<your-LAN-IP>:8000
 ```
 
 On the login screen use **Testmodus** to pick a role. On the phone you can add the page to the home screen (PWA).
-Settings → System → "Testdaten zurücksetzen" (owner) restores the demo data.
+Settings → System → "Reset test data" (owner) restores the demo data.
 
 ## Roles
 
@@ -25,7 +25,9 @@ Settings → System → "Testdaten zurücksetzen" (owner) restores the demo data
 | Dashboard, players, reports, warn/mute/kick, temp ban (max 7 days) | x | x | x | x |
 | Permanent/long sanctions, revoke, appeals, player ranks, team (mods) | | x | | x |
 | Broadcast | | x | x | x |
-| Server logs/restart, maintenance, feature flags | | | x | x |
+| Instance details (metrics, players, plugins) | x | x | x | x |
+| Console logs, console commands, restart, maintenance, feature flags | | | x | x |
+| Analytics (retention, DAU/MAU, peak hours, modes, regions) | | x | x | x |
 | Audit log | | x | x | x |
 | Manage all team roles, reset test data | | | | x |
 
@@ -49,5 +51,6 @@ Roles must then be enforced server-side; the checks in this repo are only for th
 
 - `js/app.js` shell, routing, navigation (sidebar on desktop, bottom bar and drawer on mobile)
 - `js/pages/*` one module per page
-- `js/api.js`, `js/seed.js` mock backend and demo data
+- `js/api.js`, `js/seed.js`, `js/analytics.js`, `js/consoleLogs.js` mock backend and demo data (analytics, live console output)
+- `js/charts.js` dependency-free SVG charts
 - `js/roles.js`, `js/auth.js` permissions and Discord login
