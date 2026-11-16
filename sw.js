@@ -1,5 +1,5 @@
 // Network first so the newest test build is always shown; cache only as offline fallback.
-const CACHE = "avenmc-panel-v2";
+const CACHE = "avenmc-panel-v3";
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (e) => e.waitUntil(
   caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())));

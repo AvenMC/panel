@@ -35,6 +35,7 @@ async function list(user) {
 async function detail(iid, user) {
   const i = await api.instance(iid);
   const showConsole = can(user.role, "servers.logs");
+  const pointLabels = Array.from({ length: 60 }, (_, k) => (k === 59 ? "now" : `${59 - k} min ago`));
   const labels = [[0, "-60 min"], [30, "-30 min"], [59, "now"]];
   const perf = [{ label: "TPS", color: "#66eb8c", values: i.history.tps }];
   const load = [{ label: "CPU %", color: "#28b9f5", values: i.history.cpu }, { label: "RAM %", color: "#b89efa", values: i.history.mem }];
@@ -52,10 +53,10 @@ async function detail(iid, user) {
     el("div", { className: "grid stats small" }, miniStat("Players", `${i.players}/${i.max}`, i.history.players), miniStat("TPS", i.tps, i.history.tps), miniStat("CPU", `${i.cpu}%`, i.history.cpu), miniStat("RAM", `${i.mem}%`, i.history.mem)),
     showConsole && card(el("h2", { text: "Console" }), consoleView(i, user)),
     el("div", { className: "grid two" },
-      card(el("h2", { text: "Performance (last 60 min)" }), legend(perf), lineChart(perf, { max: 20, labels })),
-      card(el("h2", { text: "Resource usage" }), legend(load), lineChart(load, { max: 100, labels, format: (v) => `${v}%` }))),
+      card(el("h2", { text: "Performance (last 60 min)" }), legend(perf), lineChart(perf, { max: 20, labels, pointLabels })),
+      card(el("h2", { text: "Resource usage" }), legend(load), lineChart(load, { max: 100, labels, pointLabels, format: (v) => `${v}%` }))),
     el("div", { className: "grid two" },
-      card(el("h2", { text: "Player count" }), legend(pl), lineChart(pl, { max: i.max, labels })),
+      card(el("h2", { text: "Player count" }), legend(pl), lineChart(pl, { max: i.max, labels, pointLabels })),
       card(el("h2", { text: "Details" }), el("div", { className: "kv" }, info.map(([k, v]) => [el("span", { className: "muted small", text: k }), el("span", { text: v })])))),
     el("div", { className: "grid two" },
       card(el("h2", { text: `Players on this instance (${i.onlinePlayers.length})` }), i.onlinePlayers.length ? el("div", { className: "list" }, i.onlinePlayers.map((p) => el("a", { className: "row", href: `#/players/${p.id}` },

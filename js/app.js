@@ -4,6 +4,9 @@ import { api } from "./api.js";
 import { can, ROLES } from "./roles.js";
 import { roleBadge, toast } from "./ui.js";
 import { config } from "./config.js";
+import { initTips } from "./charts.js";
+
+initTips();
 
 const page = (file) => () => import(`./pages/${file}.js`);
 

@@ -51,8 +51,8 @@ export async function render() {
       kpi("Peak concurrent", peak.value, peak), kpi("Avg. session length", `${Math.round(session.value)} min`, session),
       kpi("Stickiness (DAU/MAU)", pct(stickiness))),
     recordsCard(data),
-    card(el("h2", { text: "Player growth" }), legend(growth), lineChart(growth, { labels: labels(cur) })),
-    card(el("h2", { text: "Peak player count" }), legend(peakSeries), lineChart(peakSeries, { labels: labels(cur) })),
+    card(el("h2", { text: "Player growth" }), legend(growth), lineChart(growth, { labels: labels(cur), pointLabels: cur.map((d) => new Date(d.date).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })) })),
+    card(el("h2", { text: "Peak player count" }), legend(peakSeries), lineChart(peakSeries, { labels: labels(cur), pointLabels: cur.map((d) => new Date(d.date).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" })) })),
     retentionCard(data), el("div", { className: "grid two" }, heatmapCard(data), el("div", { className: "stack" }, modeCard(data), regionCard(data), sessionCard(data))));
 }
 
@@ -76,7 +76,7 @@ function retentionCard(data) {
   const table = el("div", { className: "tableWrap" }, el("table", { className: "heatTable" },
     el("thead", {}, el("tr", {}, el("th", { text: "Week of" }), el("th", { text: "New" }), RETENTION_DAYS.map((d) => el("th", { text: `D${d}` })))),
     el("tbody", {}, data.cohorts.filter((c) => c.values[0] !== null).reverse().map((c) => el("tr", {}, el("th", { text: shortDate(c.start) }), el("td", { text: c.size }),
-      c.values.map((v) => el("td", { className: "cell", style: heat(v), text: v === null ? "–" : pct(v) })))))));
+      c.values.map((v, j) => el("td", { className: "cell", "data-tip": v === null ? "No data yet" : `Week of ${shortDate(c.start)} · ${c.size} new · D${RETENTION_DAYS[j]}: ${pct(v)}`, style: heat(v), text: v === null ? "–" : pct(v) })))))));
 
   return card(el("h2", { text: "Retention" }),
     el("p", { className: "small muted", text: "Share of new players who come back N days after their first join, grouped by the week they joined." }), summary, table);
@@ -87,7 +87,7 @@ function heatmapCard(data) {
   const grid = el("div", { className: "hourGrid" },
     el("span"), Array.from({ length: 24 }, (_, h) => el("span", { className: "hourLabel", text: h % 6 === 0 ? String(h) : "" })),
     data.hourly.map((row, d) => [el("span", { className: "dayLabel", text: DAYS[d] }),
-      row.map((v, h) => el("span", { className: "hourCell", title: `${DAYS[d]} ${h}:00 · ~${v} players`, style: `background: color-mix(in srgb, var(--colorPrimary) ${Math.round(8 + (v / max) * 82)}%, var(--colorSurface))` }))]));
+      row.map((v, h) => el("span", { className: "hourCell", "data-tip": `${DAYS[d]} ${h}:00 · ~${v} players`, style: `background: color-mix(in srgb, var(--colorPrimary) ${Math.round(8 + (v / max) * 82)}%, var(--colorSurface))` }))]));
   return card(el("h2", { text: "Peak hours" }), el("p", { className: "small muted", text: "Average concurrent players by weekday and hour (UTC)." }), grid);
 }
 

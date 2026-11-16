@@ -203,3 +203,14 @@ a.instance:hover { border-color: var(--colorPrimaryLine); }
 
 @media (max-width: 520px) { .heatTable { font-size: 11px; border-spacing: 2px; } }
 @media (max-width: 520px) { .tab { padding-inline: var(--space2); font-size: 13px; } .tabs { gap: 6px; } }
+
+/* Chart tooltips */
+.chartWrap { position: relative; touch-action: pan-y; }
+.chart .guide { stroke: var(--colorTextMuted); stroke-width: 1; stroke-dasharray: 3 3; }
+.chart .pointDot { stroke: var(--colorSurface); stroke-width: 2; }
+.tip { position: absolute; top: 0; z-index: 30; pointer-events: none; background: var(--colorSurface); border: 1px solid var(--colorBorder); border-radius: 8px; padding: 6px 10px; font-size: 12px; box-shadow: 0 6px 20px rgb(0 0 0 / 40%); white-space: nowrap; display: flex; flex-direction: column; gap: 2px; }
+.tip[hidden] { display: none; }
+.tip.floating { position: fixed; }
+.tipRow { display: flex; align-items: center; gap: 6px; }
+.tipRow b { margin-left: auto; padding-left: 10px; }
+.hourCell, .heatTable td.cell, .barRow { cursor: default; }
